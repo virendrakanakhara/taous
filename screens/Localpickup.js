@@ -131,17 +131,17 @@ const Localpickup = () => {
       <Text style={styles.name}>{item.state}</Text>
       <Text style={styles.name}>{item.country}</Text>
       <Text style={styles.name}>{item.postcode}</Text>
-      <View style={{position:"absolute",top:5,end:10,width:70,height:50,flexDirection:"row",justifyContent:"space-between",paddingTop:8}}>
+      <View style={{position:"absolute",top:5,end:10,width:30,height:50,flexDirection:"row",justifyContent:"space-between",paddingTop:8}}>
       <TouchableOpacity onPress={()=>setEditItem(item)}><EntypoIcon
               color={Colors.greenBtnColor}
               name='edit'
               size={20}
             /></TouchableOpacity>
-      <TouchableOpacity><AntIcon
+     {/*  <TouchableOpacity><AntIcon
               color={Colors.greenBtnColor}
               name='delete'
               size={20}
-            /></TouchableOpacity>  
+            /></TouchableOpacity>  */} 
       </View>
     </View>
   );
@@ -153,39 +153,39 @@ const Localpickup = () => {
    
     if(addressname == undefined || addressname.length == 0)
     {
-      alert("Please enter address name !!")
+      alert(t('localpickup_pleaseenteraddressname_lbl'))
     }
     else if(firstname == undefined || firstname.length == 0)
     {
-      alert("Please enter firstname !!")
+      alert(t('localpickup_pleaseenterfirstname_lbl'))
     }
     else if(lastname == undefined || lastname.length == 0)
     {
-      alert("Please enter lastname !!")
+      alert(t('localpickup_pleaseenterlastname_lbl'))
     }
     else if(address1 == undefined || address1.length == 0)
     {
-      alert("Please enter address value !!")
+      alert(t('localpickup_pleaseenteraddress_lbl'))
     }
     else if(city == undefined || city.length == 0)
     {
-      alert("Please enter city !!")
+      alert(t('localpickup_pleaseentercity_lbl'))
     }
     else if(statename == undefined || statename.length == 0)
    {
-     alert("Please enter state name !!")
+     alert(t('localpickup_pleaseenterstate_lbl'))
    }
     else if(zipcode == undefined || zipcode.length == 0)
     {
-      alert("Please enter zipcode !!")
+      alert(t('localpickup_pleaseenterzipcode_lbl'))
     }
     else if(phone == undefined || phone.length == 0)
     {
-      alert("Please enter phone number !!")
+      alert(t('localpickup_pleaseenterphone_lbl'))
     }
     else if(email == undefined || email.length == 0)
     {
-      alert("Please enter email value !!")
+      alert(t('localpickup_pleaseenteremail_lbl'))
     }
     else
     {

@@ -252,6 +252,15 @@
       "localpickup_addaddress_lbl":"Ajoutez l'adresse",
       "localpickup_updateaddress_lbl":"Mettre à jour l'adresse",
       "localpickup_youdonothaveaddress_lbl":"Vous n'avez pas encore d'adresses enregistrées.",
+      "localpickup_pleaseenteraddressname_lbl":"Veuillez entrer le nom de l'adresse !!",
+      "localpickup_pleaseenterfirstname_lbl":"Veuillez saisir votre prénom !!",
+      "localpickup_pleaseenterlastname_lbl":"Veuillez entrer le nom de famille !!",
+      "localpickup_pleaseenteraddress_lbl":"Veuillez entrer la valeur de l'adresse !!",
+      "localpickup_pleaseentercity_lbl":"Veuillez entrer la ville !!",
+      "localpickup_pleaseenterstate_lbl":"Veuillez entrer le nom de l'état !!",
+      "localpickup_pleaseenterzipcode_lbl":"Veuillez saisir le code postal !!",
+      "localpickup_pleaseenterphone_lbl":"Veuillez entrer le numéro de téléphone !!",
+      "localpickup_pleaseenteremail_lbl":"Veuillez entrer la valeur de l'e-mail !!",
 
       "user_wishlists_title":"Liste de voeux",
 

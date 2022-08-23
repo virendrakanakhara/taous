@@ -249,6 +249,15 @@
       "localpickup_addaddress_lbl":"اضف عنوان",
       "localpickup_updateaddress_lbl":"تحديث العنوان",
       "localpickup_youdonothaveaddress_lbl":"ليس لديك أي عناوين محفوظة حتى الآن.",
+      "localpickup_pleaseenteraddressname_lbl":"الرجاء إدخال اسم العنوان !!",
+      "localpickup_pleaseenterfirstname_lbl":"الرجاء إدخال الاسم الأول !!",
+      "localpickup_pleaseenterlastname_lbl":"الرجاء إدخال اسم العائلة !!",
+      "localpickup_pleaseenteraddress_lbl":"الرجاء إدخال قيمة العنوان !!",
+      "localpickup_pleaseentercity_lbl":"الرجاء إدخال المدينة !!",
+      "localpickup_pleaseenterstate_lbl":"الرجاء إدخال اسم الدولة !!",
+      "localpickup_pleaseenterzipcode_lbl":"الرجاء إدخال الرمز البريدي !!",
+      "localpickup_pleaseenterphone_lbl":"الرجاء إدخال رقم الهاتف !!",
+      "localpickup_pleaseenteremail_lbl":"الرجاء إدخال قيمة البريد الإلكتروني !!",
 
       "user_wishlists_title":"قوائم الامنيات",
 

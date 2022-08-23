@@ -249,6 +249,15 @@
       "localpickup_addaddress_lbl":"Add Address",
       "localpickup_updateaddress_lbl":"Update address",
       "localpickup_youdonothaveaddress_lbl":"You do not have any saved addresses yet.",
+      "localpickup_pleaseenteraddressname_lbl":"Please enter address name !!",
+      "localpickup_pleaseenterfirstname_lbl":"Please enter firstname !!",
+      "localpickup_pleaseenterlastname_lbl":"Please enter lastname !!",
+      "localpickup_pleaseenteraddress_lbl":"Please enter address value !!",
+      "localpickup_pleaseentercity_lbl":"Please enter city !!",
+      "localpickup_pleaseenterstate_lbl":"Please enter state name !!",
+      "localpickup_pleaseenterzipcode_lbl":"Please enter zipcode !!",
+      "localpickup_pleaseenterphone_lbl":"Please enter phone number !!",
+      "localpickup_pleaseenteremail_lbl":"Please enter email value !!",
 
       "user_wishlists_title":"Wishlists",
 
