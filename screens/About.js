@@ -23,7 +23,7 @@ import {FONT} from '../style/fonts';
 import { WebView } from 'react-native-webview';
 import { APICONFIG } from "../config/api";
 
-
+///master test
 const About = (props) => {
 
 const [isDataLoading,setDataLoading] = useState(true);  
