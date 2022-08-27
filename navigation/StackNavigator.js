@@ -25,6 +25,7 @@ import TimeSlots from "../screens/TimeSlots";
 import OrderHistory from "../screens/OrderHistory";
 import WishList from "../screens/WishList";
 import AwesaPlus from "../screens/AwesaPlus";
+import BuyAwesaPlus from "../screens/BuyAwesaPlus";
 import SetAReminder from "../screens/SetAReminder";
 import StoreCredit from "../screens/StoreCredit";
 import GiftCards from "../screens/GiftCards";
@@ -321,6 +322,13 @@ const ContactStackNavigator = () => {
           header:()=>(<HeaderUser navigation={navigation} title="Awesa Plus" showTitle={true} showBackBtn={true} />),
     
   })} component={AwesaPlus}  />
+
+<Stack.Screen name="BuyAwesaPlus" options={({ navigation }) => ({
+          header:()=>(<HeaderUser navigation={navigation} title="Buy Awesa Plus" showTitle={true} showBackBtn={true} />),
+    
+  })} component={BuyAwesaPlus}  />
+
+
   <Stack.Screen name="SetAReminder" options={({ navigation }) => ({
           header:()=>(<HeaderUser navigation={navigation} title={t('setareminder_title')} showTitle={true} showBackBtn={true} />),
     

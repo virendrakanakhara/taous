@@ -31,9 +31,9 @@ const GiftCards = (props) => {
   const {bookmarks } = useSelector(state => state.booksReducer);
   const {user} =  useSelector(state=>state.userReducer);
   const dispatch = useDispatch();
-  [section,setSection] = useState(1);
-  [carddata,setCardData]=useState();
-  [isLoading,setLoading] = useState(false);
+  const [section,setSection] = useState(1);
+  const [carddata,setCardData]=useState();
+  const [isLoading,setLoading] = useState(false);
   
   useEffect(() => {
     fetchCards();

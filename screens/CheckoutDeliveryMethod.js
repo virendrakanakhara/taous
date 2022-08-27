@@ -82,7 +82,7 @@ const CheckoutDeliveryMethod = (props) => {
         [
       
           {
-            text: "Yes",
+            text: t('common_yes_lbl'),
             onPress: () => {
               removeFromCartFun(product);
               
@@ -92,7 +92,7 @@ const CheckoutDeliveryMethod = (props) => {
           // The "No" button
           // Does nothing but dismiss the dialog when tapped
           {
-            text: "No",
+            text: t('common_no_lbl'),
           },
         ]
       );

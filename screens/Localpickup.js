@@ -251,6 +251,109 @@ const Localpickup = () => {
   
   
  }
+
+ const updateAddress = async () => {
+   
+  if(addressname == undefined || addressname.length == 0)
+  {
+    alert(t('localpickup_pleaseenteraddressname_lbl'))
+  }
+  else if(firstname == undefined || firstname.length == 0)
+  {
+    alert(t('localpickup_pleaseenterfirstname_lbl'))
+  }
+  else if(lastname == undefined || lastname.length == 0)
+  {
+    alert(t('localpickup_pleaseenterlastname_lbl'))
+  }
+  else if(address1 == undefined || address1.length == 0)
+  {
+    alert(t('localpickup_pleaseenteraddress_lbl'))
+  }
+  else if(city == undefined || city.length == 0)
+  {
+    alert(t('localpickup_pleaseentercity_lbl'))
+  }
+  else if(statename == undefined || statename.length == 0)
+ {
+   alert(t('localpickup_pleaseenterstate_lbl'))
+ }
+  else if(zipcode == undefined || zipcode.length == 0)
+  {
+    alert(t('localpickup_pleaseenterzipcode_lbl'))
+  }
+  else if(phone == undefined || phone.length == 0)
+  {
+    alert(t('localpickup_pleaseenterphone_lbl'))
+  }
+  else if(email == undefined || email.length == 0)
+  {
+    alert(t('localpickup_pleaseenteremail_lbl'))
+  }
+  else
+  {
+    
+    
+        setLoading(true)
+        try {
+        const response = await fetch(APICONFIG.REST_WC_URL+"/api_customer_save_address?",
+                                    {
+                                      method:"POST",
+                                      body: JSON.stringify({
+                                        address_id:addressid,
+                                        user_id:user.ID,
+                                        address_name:addressname,
+                                        first_name:firstname,
+                                        last_name:lastname,
+                                        company:companyname,
+                                        country:"MA",
+                                        address_1:address1,
+                                        address_2:address2,
+                                        city:city,
+                                        state:statename,
+                                        postcode:zipcode,
+                                        phone:phone,
+                                        email:email
+                                      }),
+                                      headers : {
+                                        Accept: 'application/json',
+                                        'Content-Type': 'application/json',
+                                        Authorization: "Basic " + base64.encode(APICONFIG.CONSUMER_KEY + ":" + APICONFIG.CONSUMER_SECRET),
+                                      }
+                                });
+        
+        const json = await response.json();
+          
+      if(json.success && json.message)
+        {
+        alert("Address saved successfully !!")
+        resetState();
+        fetchUserAddresses();
+        }
+        else
+        {
+          alert("Something went wrong,Please try again later !!")
+        }
+        
+        
+      } catch (error) {
+        console.error(error);
+        alert(error)
+        
+      } finally {
+        
+        setMode(1);
+        setLoading(false);
+      }   
+  }
+
+  
+  
+
+   
+
+
+}
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
     <View style={{ flex: 1, paddingHorizontal: 10 }}>
@@ -284,7 +387,7 @@ const Localpickup = () => {
         <TextInput onChangeText={newText => setPhone(newText)} value={phone}  style={{fontFamily:FONT.RobotoRegular,fontSize:16,borderRadius:3,borderWidth:1,borderColor:Colors.greenBtnColor,height:30,paddingStart:3,margin:10}} />
         <View style={{flexDirection:"row"}}><Text style={{fontFamily:FONT.RobotoSemiBold,color:"black",fontSize:16,paddingStart:10,paddingVertical:10}}>{t('localpickup_emailaddress_lbl')}</Text><Text style={{fontSize:20,color:"red",paddingTop:5}}>*</Text></View>
         <TextInput onChangeText={newText => setEmail(newText)} value={email}  style={{fontFamily:FONT.RobotoRegular,fontSize:16,borderRadius:3,borderWidth:1,borderColor:Colors.greenBtnColor,height:30,paddingStart:3,margin:10}} />
-        {!loading &&  <View style={{flexDirection:"row"}}><TouchableOpacity onPress={()=>{addAddress()}} style={{flex:1}}><View style={{flex:1,height:35,backgroundColor:Colors.greenBtnColor,justifyContent:"center",alignItems:"center",margin:10,borderRadius:5}}><Text style={{fontFamily:FONT.RobotoSemiBold,color:"white",fontSize:16}}>{addressid>0?t('localpickup_updateaddress_lbl'):t('localpickup_addaddress_lbl')}</Text></View></TouchableOpacity><TouchableOpacity onPress={()=>{setMode(1)}} style={{flex:1}}><View style={{flex:1,height:35,backgroundColor:Colors.greenBtnColor,justifyContent:"center",alignItems:"center",margin:10,borderRadius:5}}><Text style={{fontFamily:FONT.RobotoSemiBold,color:"white",fontSize:16}}>{t('common_cancel_lbl')}</Text></View></TouchableOpacity></View>}
+        {!loading &&  <View style={{flexDirection:"row"}}><TouchableOpacity onPress={()=>{addressid>0?updateAddress():addAddress()}} style={{flex:1}}><View style={{flex:1,height:35,backgroundColor:Colors.greenBtnColor,justifyContent:"center",alignItems:"center",margin:10,borderRadius:5}}><Text style={{fontFamily:FONT.RobotoSemiBold,color:"white",fontSize:16}}>{addressid>0?t('localpickup_updateaddress_lbl'):t('localpickup_addaddress_lbl')}</Text></View></TouchableOpacity><TouchableOpacity onPress={()=>{setMode(1)}} style={{flex:1}}><View style={{flex:1,height:35,backgroundColor:Colors.greenBtnColor,justifyContent:"center",alignItems:"center",margin:10,borderRadius:5}}><Text style={{fontFamily:FONT.RobotoSemiBold,color:"white",fontSize:16}}>{t('common_cancel_lbl')}</Text></View></TouchableOpacity></View>}
         {loading && <View style={{flexDirection:"row"}}><View style={{flex:1,height:35,backgroundColor:Colors.greenBtnColor,justifyContent:"center",alignItems:"center",margin:10,borderRadius:5}}><ActivityIndicator size={"small"} color={"white"} /></View><TouchableOpacity onPress={()=>{setMode(1)}} style={{flex:1}}><View style={{flex:1,height:35,backgroundColor:Colors.greenBtnColor,justifyContent:"center",alignItems:"center",margin:10,borderRadius:5}}><Text style={{fontFamily:FONT.RobotoSemiBold,color:"white",fontSize:16}}>{t('common_cancel_lbl')}</Text></View></TouchableOpacity></View>}
       </View>
       </ScrollView>
