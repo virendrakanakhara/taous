@@ -129,7 +129,7 @@ const getOrderDetail = async () => {
           </View>
           <View style={{flex:3,justifyContent:"center"}}>
                <View style={{flexDirection:"row"}}><Text style={styles.title} numberOfLines={2}>{item.name}</Text>{/* <Text style={styles.itemtotal}>{parseFloat(item.quantity*item.price).toFixed(2)} DH</Text> */}</View>
-               <Text style={styles.subtitle}>{t('common_price_lbl')}: {item.price} DH</Text>
+               <Text style={styles.subtitle}>{t('common_price_lbl')}: {item.subtotal} DH</Text>
                 {item.meta_data.length > 0 && item.meta_data.map(itm=>{ return <View style={{flexDirection:"row",height:25}}><Text style={{fontFamily:FONT.RobotoBold}}>{replaceKeyName(itm.display_key)} : </Text><Text style={{fontFamily:FONT.RobotoRegular}}> {itm.display_value}</Text></View>})} 
                <View style={{flexDirection:"row",justifyContent:"center",alignItems:"center",marginTop:10}}>
                     <View style={{height:25,flexDirection:"row",flex:1}}>
@@ -209,7 +209,7 @@ const getOrderDetail = async () => {
           <Collapsible collapsed={isOrderSummary}>
           <>
           {matchAndFindValueFromArray(dataorder.meta_data,"pi_delivery_type")=="delivery" && <View style={{height:30,marginVertical:5,marginHorizontal:10,flex:1,flexDirection:"row"}}><View style={{flex:3,justifyContent:"center",alignItems:"flex-end"}}><Text style={{fontFamily:FONT.RobotoRegular,textAlign:"left"}}>{t('orderdetails_shippingcharge_lbl')}:</Text></View><View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{fontFamily:FONT.RobotoRegular,textAlign:"left"}}>{dataorder.shipping_total} DH</Text></View></View>}
-    <View style={{height:30,marginVertical:5,marginHorizontal:10,flex:1,flexDirection:"row"}}><View style={{flex:3,justifyContent:"center",alignItems:"flex-end"}}><Text style={{color:"red",fontFamily:FONT.RobotoRegular,textAlign:"left"}}>{t('orderdetails_coupondiscount_lbl')}:</Text></View><View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{color:"red",fontFamily:FONT.RobotoRegular,textAlign:"left"}}> - 0.00 DH</Text></View></View>
+    <View style={{height:30,marginVertical:5,marginHorizontal:10,flex:1,flexDirection:"row"}}><View style={{flex:3,justifyContent:"center",alignItems:"flex-end"}}><Text style={{color:"red",fontFamily:FONT.RobotoRegular,textAlign:"left"}}>{t('orderdetails_coupondiscount_lbl')}:</Text></View><View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{color:"red",fontFamily:FONT.RobotoRegular,textAlign:"left"}}> - {dataorder.discount_total} DH</Text></View></View>
     <View style={{height:30,marginVertical:5,marginHorizontal:10,flex:1,flexDirection:"row"}}><View style={{flex:3,justifyContent:"center",alignItems:"flex-end"}}><Text style={{color:"red",fontFamily:FONT.RobotoRegular,textAlign:"left"}}>{t('orderdetails_giftdiscount_lbl')}:</Text></View><View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{color:"red",fontFamily:FONT.RobotoRegular,textAlign:"left"}}>- 0.00 DH</Text></View></View>
     
     <View style={{height:30,marginVertical:5,marginHorizontal:10,flex:1,flexDirection:"row"}}><View style={{flex:3,justifyContent:"center",alignItems:"flex-end"}}><Text style={{fontFamily:FONT.RobotoBold,textAlign:"left"}}>{t('common_total_lbl')}:</Text></View><View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{fontFamily:FONT.RobotoBold,textAlign:"left"}}>{dataorder.total} DH</Text></View></View>

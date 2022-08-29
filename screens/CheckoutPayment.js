@@ -56,6 +56,9 @@ const CheckoutPayment = (props) => {
   const [isCreateorderLoading,setCreateorderLoading] = useState(false);
 
   //requested variables
+  const [CouponDiscount,setCouponDiscount] = useState(props.route.params!=undefined && props.route.params.CouponDiscount!=null?props.route.params.CouponDiscount:0); 
+  const [couponId,setCouponId] = useState(props.route.params!=undefined && props.route.params.CouponId!=null?props.route.params.CouponId:0);
+  const [couponCode,setCouponCode] = useState(props.route.params!=undefined && props.route.params.CouponCode!=null?props.route.params.CouponCode:''); 
   const [Delivery_Type,setDeliveryType] = useState(props.route.params!=undefined && props.route.params.Delivery_Type!=null?props.route.params.Delivery_Type:'');
   const [Preffered_Address_Id,setPrefferedAddressId] = useState(props.route.params!=undefined && props.route.params.Preffered_Address_Id!=null?props.route.params.Preffered_Address_Id:'');
   const [Preffered_Address_Date,setPrefferedAddressDate] = useState(props.route.params!=undefined && props.route.params.Preffered_Address_Date!=null?props.route.params.Preffered_Address_Date:'');
@@ -244,7 +247,12 @@ const placeOrder = async ()=>{
           line_items.push({"product_id":item.product.id,"quantity":item.qty})
        });   
 
-
+ ///if coupondiscount is greater than 0 then apply and update it on order
+  let couponlines = [];
+ if(CouponDiscount > 0)
+ {
+   couponlines.push({'code':couponCode,'discount':CouponDiscount,'meta_data':[{'key':"coupon_data",'value':[{'id':couponId,'code':couponCode,'amount':CouponDiscount}]}]});
+ }
        
 
 
@@ -255,11 +263,12 @@ const placeOrder = async ()=>{
           billing:Billing_Address_Id,
           shipping:shipping_item,
           line_items:line_items,
-          shipping_lines:shipping_lines 
-        }
+          shipping_lines:shipping_lines,
+          coupon_lines:couponlines 
+        } 
 
         //creating order
-       
+       //alert(JSON.stringify(order_data))
   
 
   
@@ -279,7 +288,6 @@ const placeOrder = async ()=>{
                                    });
           
           const json = await response.json();
-          //alert(JSON.stringify(json))
           
          if(json.id && json.id > 0)
           {
@@ -303,6 +311,9 @@ const placeOrder = async ()=>{
 
               }
 
+             
+              
+
               //update order meta data
               try {
                 const response = await fetch(APICONFIG.REST_WC_URL+"/orders/"+UpdateOrderId,
@@ -319,8 +330,7 @@ const placeOrder = async ()=>{
                const json = await response.json();
                if(json.id && json.id > 0)
                {
-                 //props.navigation.navigate("CheckoutThankyou")
-                 //create order not if user has submitted order note
+                 
                  if(OrderNote!=undefined && OrderNote!="")
                  {
                               try {
@@ -386,7 +396,7 @@ const placeOrder = async ()=>{
           
         } finally {
         
-         // setCreateorderLoading(false)
+         
         }
         
         
@@ -404,9 +414,15 @@ const placeOrder = async ()=>{
     {cartData.length > 0 && <ScrollView>
     <View style={{ flex: 1, paddingHorizontal: 10 }}>
 
-    <View style={{backgroundColor:"#ecf3da",height:250,width:"100%",marginTop:15}}>
+    <View style={{backgroundColor:"#ecf3da",width:"100%",marginTop:15}}>
                    
+                    {CouponDiscount > 0 && 
                     
+                    <View style={{height:40,marginHorizontal:5,marginVertical:10,height:40,justifyContent:"center",alignItems:"center",flexDirection:"row",backgroundColor:Colors.greenBtnColor}}>
+                         <View style={{flex:1,justifyContent:"center",alignItems:"flex-start"}}><Text style={{padding:10,color:"red",fontFamily:FONT.RobotoBold}}>Coupon Discount</Text></View>
+                         <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{padding:10,color:"red",fontFamily:FONT.RobotoBold}}>- {CouponDiscount} DH</Text></View>
+                   </View>
+                    }
                      <View style={{height:40,marginHorizontal:5,marginVertical:10,height:40,justifyContent:"center",alignItems:"center",flexDirection:"row",backgroundColor:Colors.greenBtnColor}}>
                         <View style={{flex:1,justifyContent:"center",alignItems:"flex-start"}}><Text style={{padding:10,color:"white",fontFamily:FONT.RobotoBold}}>{t('placeorder_subtotal_lbl')}</Text></View>
                         <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{padding:10,color:"white",fontFamily:FONT.RobotoBold}}>{SubTotal} DH</Text></View>
@@ -418,7 +434,7 @@ const placeOrder = async ()=>{
 
                    <View style={{height:40,marginHorizontal:5,marginVertical:10,height:40,justifyContent:"center",alignItems:"center",flexDirection:"row",backgroundColor:Colors.greenBtnColor}}>
                        <View style={{flex:1,justifyContent:"center",alignItems:"flex-start"}}><Text style={{paddingStart:10,color:"white",fontSize:18,fontFamily:FONT.RobotoMedium}}>{t('placeorder_total_lbl')}</Text></View>
-                       <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{paddingEnd:10,color:"white",fontSize:18,fontFamily:FONT.RobotoMedium}}>{Total} DH</Text></View>
+                       <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{paddingEnd:10,color:"white",fontSize:18,fontFamily:FONT.RobotoMedium}}>{parseFloat(Total-CouponDiscount).toFixed(2)} DH</Text></View>
                    </View> 
                    {!isCreateorderLoading && <TouchableOpacity onPress={()=>placeOrder()} style={{flex:1,height:40}}><View style={{height:40,marginHorizontal:5,marginVertical:10,height:40,justifyContent:"center",alignItems:"center",flexDirection:"row",borderRadius:10,backgroundColor:Colors.drawerHeaderBackground}}>
                       <Text style={{color:"white",fontSize:18,fontFamily:FONT.RobotoMedium}}>{t('placeorder_placeorder_lbl')}</Text></View>

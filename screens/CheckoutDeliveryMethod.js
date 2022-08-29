@@ -48,6 +48,9 @@ const CheckoutDeliveryMethod = (props) => {
   //const [DATAFINAL,SetDATAFINAL] = useState([]);
   const [SubTotal,setSubTotal] = useState(cart.reduce((prevValue,curValue)=>parseFloat(Number(prevValue)+Number(curValue.qty*curValue.product.full_item.price)).toFixed(2),0));
   const [Total,SetTotal] = useState(cart.reduce((prevValue,curValue)=>parseFloat(Number(prevValue)+Number(curValue.qty*curValue.product.full_item.price)).toFixed(2),50));
+  const [CouponDiscount,setCouponDiscount] = useState(props.route.params!=undefined && props.route.params.CouponDiscount!=null?props.route.params.CouponDiscount:0); 
+  const [couponId,setCouponId] = useState(props.route.params!=undefined && props.route.params.CouponId!=null?props.route.params.CouponId:0);
+  const [couponCode,setCouponCode] = useState(props.route.params!=undefined && props.route.params.CouponCode!=null?props.route.params.CouponCode:''); 
   const [locations,setLocations] = useState([]);
   const [deliveryOrPickupId,setDeliveryOrPickupId] = useState(-1);
   
@@ -369,7 +372,7 @@ const CheckoutDeliveryMethod = (props) => {
     }
     else 
     {
-        props.navigation.navigate('CheckoutPayment',{Preffered_Address_Id:deliveryOrPickupId,Billing_Address_Id:BillingAddressItem,Preffered_Address_Date:deliveryOrPickupDate,Preffered_Address_Time:deliveryOrPickupTime,Delivery_Type:deliveryType})
+        props.navigation.navigate('CheckoutPayment',{Preffered_Address_Id:deliveryOrPickupId,Billing_Address_Id:BillingAddressItem,Preffered_Address_Date:deliveryOrPickupDate,Preffered_Address_Time:deliveryOrPickupTime,Delivery_Type:deliveryType,"CouponDiscount":CouponDiscount,"CouponId":couponId,"CouponCode":couponCode})
     }
   }
 

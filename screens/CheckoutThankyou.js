@@ -124,8 +124,8 @@ const CheckoutThankyou = (props) => {
                 /> 
           </View>
           <View style={{flex:3,justifyContent:"center"}}>
-               <View style={{flexDirection:"row"}}><Text style={styles.title} numberOfLines={2}>{item.name}</Text><Text style={styles.itemtotal}>{parseFloat(item.quantity*item.price).toFixed(2)} DH</Text></View>
-               <Text style={styles.subtitle}>{t('thankyou_price_lbl')}: {item.price} DH</Text>
+               <View style={{flexDirection:"row"}}><Text style={styles.title} numberOfLines={2}>{item.name}</Text><Text style={styles.itemtotal}>{parseFloat(item.quantity*item.subtotal).toFixed(2)} DH</Text></View>
+               <Text style={styles.subtitle}>{t('thankyou_price_lbl')}: {item.subtotal} DH</Text>
                {item.meta_data.length > 0 && item.meta_data.map(itm=>{ return <View style={{flexDirection:"row"}}><Text style={{fontFamily:FONT.RobotoBold}}>{itm.display_key}</Text><Text style={{fontFamily:FONT.RobotoRegular}}>: {itm.display_value}</Text></View>})}
                <View style={{flexDirection:"row",justifyContent:"center",alignItems:"center",marginTop:10}}>
                     <View style={{height:25,flexDirection:"row",flex:1}}>
@@ -176,7 +176,7 @@ const CheckoutThankyou = (props) => {
             </View>
             <View style={{height:1,marginVertical:10,backgroundColor:Colors.commonbg}}></View>
     {matchAndFindValueFromArray(OrderData.meta_data,"pi_delivery_type")=="delivery" && <View style={{height:30,marginVertical:5,marginHorizontal:10,flex:1,flexDirection:"row"}}><View style={{flex:3,justifyContent:"center",alignItems:"flex-end"}}><Text style={{fontFamily:FONT.RobotoRegular,textAlign:"left"}}>{t('thankyou_shippingcharge_lbl')}:</Text></View><View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{fontFamily:FONT.RobotoRegular,textAlign:"left"}}>{OrderData.shipping_total} DH</Text></View></View>}
-    <View style={{height:30,marginVertical:5,marginHorizontal:10,flex:1,flexDirection:"row"}}><View style={{flex:3,justifyContent:"center",alignItems:"flex-end"}}><Text style={{color:"red",fontFamily:FONT.RobotoRegular,textAlign:"left"}}>{t('thankyou_coupondiscount_lbl')}:</Text></View><View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{color:"red",fontFamily:FONT.RobotoRegular,textAlign:"left"}}> - 0.00 DH</Text></View></View>
+    <View style={{height:30,marginVertical:5,marginHorizontal:10,flex:1,flexDirection:"row"}}><View style={{flex:3,justifyContent:"center",alignItems:"flex-end"}}><Text style={{color:"red",fontFamily:FONT.RobotoRegular,textAlign:"left"}}>{t('thankyou_coupondiscount_lbl')}:</Text></View><View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{color:"red",fontFamily:FONT.RobotoRegular,textAlign:"left"}}> - {OrderData.discount_total} DH</Text></View></View>
     <View style={{height:30,marginVertical:5,marginHorizontal:10,flex:1,flexDirection:"row"}}><View style={{flex:3,justifyContent:"center",alignItems:"flex-end"}}><Text style={{color:"red",fontFamily:FONT.RobotoRegular,textAlign:"left"}}>{t('thankyou_giftcarddiscount_lbl')}:</Text></View><View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{color:"red",fontFamily:FONT.RobotoRegular,textAlign:"left"}}>- 0.00 DH</Text></View></View>
     
     <View style={{height:30,marginVertical:5,marginHorizontal:10,flex:1,flexDirection:"row"}}><View style={{flex:3,justifyContent:"center",alignItems:"flex-end"}}><Text style={{fontFamily:FONT.RobotoBold,textAlign:"left"}}>{t('thankyou_total_lbl')}:</Text></View><View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{fontFamily:FONT.RobotoBold,textAlign:"left"}}>{OrderData.total} DH</Text></View></View>

@@ -41,7 +41,9 @@ const CheckoutReviewOrder = (props) => {
   //const [DATAFINAL,SetDATAFINAL] = useState([]);
   const [SubTotal,setSubTotal] = useState(cart.reduce((prevValue,curValue)=>parseFloat(Number(prevValue)+Number(curValue.qty*curValue.product.variation_item.price)).toFixed(2),0));
   const [Total,SetTotal] = useState(cart.reduce((prevValue,curValue)=>parseFloat(Number(prevValue)+Number(curValue.qty*curValue.product.variation_item.price)).toFixed(2),50));
- 
+  const [CouponDiscount,setCouponDiscount] = useState(props.route.params!=undefined && props.route.params.CouponDiscount!=null?props.route.params.CouponDiscount:0); 
+  const [couponId,setCouponId] = useState(props.route.params!=undefined && props.route.params.CouponId!=null?props.route.params.CouponId:0);
+  const [couponCode,setCouponCode] = useState(props.route.params!=undefined && props.route.params.CouponCode!=null?props.route.params.CouponCode:''); 
 
   
   const addQtyToCartFun = product => dispatch(addQtyToCart(product));
@@ -167,7 +169,7 @@ const CheckoutReviewOrder = (props) => {
 
     if(Object.keys(user).length > 0)
     {
-       props.navigation.navigate("CheckoutDeliveryMethod");
+       props.navigation.navigate("CheckoutDeliveryMethod",{"CouponDiscount":CouponDiscount,"CouponId":couponId,"CouponCode":couponCode});
     }
     else
     {
@@ -184,9 +186,15 @@ const CheckoutReviewOrder = (props) => {
     {cart.length > 0 && <ScrollView>
     <View style={{ flex: 1, paddingHorizontal: 10 }}>
 
-    <View style={{backgroundColor:"#ecf3da",height:240,width:"100%",marginTop:15}}>
+    <View style={{backgroundColor:"#ecf3da",width:"100%",marginTop:15}}>
                    
                     
+                    {CouponDiscount > 0 && 
+                    <View style={{height:40,marginHorizontal:5,marginVertical:10,height:40,justifyContent:"center",alignItems:"center",flexDirection:"row",backgroundColor:Colors.greenBtnColor}}>
+                        <View style={{flex:1,justifyContent:"center",alignItems:"flex-start"}}><Text style={{padding:10,color:"red",fontFamily:FONT.RobotoBold}}>Coupon Discount</Text></View>
+                        <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{padding:10,color:"red",fontFamily:FONT.RobotoBold}}>- {CouponDiscount} DH</Text></View>
+                    </View>
+                    }
                     <View style={{height:40,marginHorizontal:5,marginVertical:10,height:40,justifyContent:"center",alignItems:"center",flexDirection:"row",backgroundColor:Colors.greenBtnColor}}>
                         <View style={{flex:1,justifyContent:"center",alignItems:"flex-start"}}><Text style={{padding:10,color:"white",fontFamily:FONT.RobotoBold}}>{t('revieworder_subtotal_lbl')}</Text></View>
                         <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{padding:10,color:"white",fontFamily:FONT.RobotoBold}}>{SubTotal} DH</Text></View>
@@ -198,7 +206,7 @@ const CheckoutReviewOrder = (props) => {
 
                    <View style={{height:40,marginHorizontal:5,marginVertical:10,height:40,justifyContent:"center",alignItems:"center",flexDirection:"row",backgroundColor:Colors.greenBtnColor}}>
                        <View style={{flex:1,justifyContent:"center",alignItems:"flex-start"}}><Text style={{paddingStart:10,color:"white",fontSize:18,fontFamily:FONT.RobotoMedium}}>{t('revieworder_total_lbl')}</Text></View>
-                       <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{paddingEnd:10,color:"white",fontSize:18,fontFamily:FONT.RobotoMedium}}>{Total} DH</Text></View>
+                       <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{paddingEnd:10,color:"white",fontSize:18,fontFamily:FONT.RobotoMedium}}>{parseFloat(Total-CouponDiscount).toFixed(2)} DH</Text></View>
                    </View>
                    <View style={{height:40,marginHorizontal:5,marginVertical:10,height:40,justifyContent:"center",alignItems:"center",flexDirection:"row"}}>
                        <View style={{flex:1,justifyContent:"center",alignItems:"center"}}><TouchableOpacity onPress={()=>{props.navigation.goBack(null)}} style={{width:"99%",height:40}}><View style={{height:40,width:"100%",justifyContent:"center",alignItems:"center",height:40,borderRadius:10,backgroundColor:Colors.drawerHeaderBackground}}>

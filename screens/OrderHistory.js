@@ -70,6 +70,7 @@ const getOrders = async () => {
                                         });
               
               const json = await response.json();
+              console.log("order data :"+JSON.stringify(json))
               setDataOrder(json);
               setDataOrderFilter(json);
               

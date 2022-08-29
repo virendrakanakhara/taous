@@ -31,6 +31,9 @@ import FastImage from 'react-native-fast-image';
 import { t } from "i18next";
 
 import {FONT} from "../style/fonts"
+import { ActivityIndicator } from "react-native-paper";
+import { APICONFIG } from "../config/api";
+import base64 from 'react-native-base64';
 const Cart = (props) => {
 
   const {bookmarks } = useSelector(state => state.booksReducer);
@@ -39,6 +42,11 @@ const Cart = (props) => {
   //const {cartCharges} = useSelector(state=>state.cartChargesReducer);
   const dispatch = useDispatch();
   //const [DATAFINAL,SetDATAFINAL] = useState([]);
+  const [couponCode,setCouponCode] = useState('');
+  const [couponId,setCouponId] = useState(0);
+  const [couponDiscount,setCouponDiscount] = useState(0);
+  const [isCouponFetchLoading,setCouponFetchLoading] = useState(false);
+  const [couponInput,setCouponInput] = useState("");
   const [SubTotal,setSubTotal] = useState(cart.reduce((prevValue,curValue)=>parseFloat(Number(prevValue)+Number(curValue.qty*curValue.product.variation_item.price)).toFixed(2),0));
   const [Total,SetTotal] = useState(cart.reduce((prevValue,curValue)=>parseFloat(Number(prevValue)+Number(curValue.qty*curValue.product.variation_item.price)).toFixed(2),50));
  
@@ -174,7 +182,7 @@ const Cart = (props) => {
 
     if(Object.keys(user).length > 0)
     {
-       props.navigation.navigate("CheckoutReviewOrder");
+       props.navigation.navigate("CheckoutReviewOrder",{"CouponDiscount":couponDiscount,"CouponId":couponId,"CouponCode":couponCode});
     }
     else
     {
@@ -182,6 +190,66 @@ const Cart = (props) => {
       props.navigation.navigate("User");
     }
 
+  }
+
+  const checkAndApplyCoupon = async() =>{
+
+    if(couponInput.length == 0)
+    {
+      alert("Please enter coupon code !!")
+    }
+    else
+    {
+      setCouponFetchLoading(true);
+      try {
+      const response = await fetch(APICONFIG.API_URL+"/get_coupon_by_code?cc="+couponInput,
+                                  {
+                                    method:"GET",
+                                    
+                                    headers : {
+                                      Accept: 'application/json',
+                                      'Content-Type': 'application/json',
+                                      Authorization: "Basic " + base64.encode(APICONFIG.CONSUMER_KEY + ":" + APICONFIG.CONSUMER_SECRET),
+                                    }
+                              });
+     
+     const json = await response.json();
+     //alert(JSON.stringify(json))
+     
+    if(json.errors && json.errors.rest_forbidden)
+    {
+      alert("Please specify valid coupon code !!")
+      setCouponDiscount(0);
+      setCouponCode('');
+      setCouponId(0);
+    }
+    else
+    {
+      let amount =  json.amount;
+      let discount_type = json.discount_type;
+      if(discount_type=="percent")
+      {
+        setCouponDiscount(parseFloat(amount*SubTotal/100).toFixed(2));
+      }
+      else
+      {
+        setCouponDiscount(parseFloat(amount).toFixed(2));
+      }
+      setCouponId(json.id);
+      setCouponCode(json.code);
+
+
+    }
+     
+     
+   } catch (error) {
+     console.error(error);
+     alert(error)
+     
+   } finally {
+    setCouponFetchLoading(false);
+   }
+    }
   }
 
   return (
@@ -203,10 +271,16 @@ const Cart = (props) => {
             <View style={{backgroundColor:"white",height:40,width:"100%",marginTop:15,justifyContent:"center",alignItems:"flex-end"}}>
                 <TouchableOpacity onPress={()=>handleClearCart()}><View style={{backgroundColor:"white",borderWidth:1,borderRadius:5,borderColor:Colors.greenBtnColor}}><Text style={{padding:10,color:Colors.greenBtnColor,fontFamily:FONT.RobotoBold}}>{t('cart_emptycart_lbl')}</Text></View></TouchableOpacity>
             </View>
-            <View style={{backgroundColor:Colors.commonbg,height:50,width:"100%",marginTop:10,justifyContent:"flex-start",alignItems:"center",flexDirection:"row"}}>
-                <TextInput style={{padding:1,marginStart:10,height:30,width:150,borderWidth:1,borderTopStartRadius:5,borderBottomStartRadius:5,borderColor:"gray",backgroundColor:"white"}} placeholder={t('cart_couponcode_lbl')} />
-                <View style={{height:30,backgroundColor:Colors.greenBtnColor,width:130,justifyContent:"center",alignItems:"center"}}><Text style={{color:"white",fontSize:14,fontFamily:FONT.RobotoMedium,padding:5}}>{t('cart_applycoupon_lbl')}</Text></View>
-            </View> 
+            {couponDiscount > 0 && <View style={{backgroundColor:Colors.commonbg,height:50,width:"100%",marginTop:10,justifyContent:"flex-start",alignItems:"center",flexDirection:"row"}}>
+                <Text style={{fontSize:14,fontFamily:FONT.RobotoMedium,paddingStart:12}}>Coupon Applied : {couponInput}</Text>
+                <TouchableOpacity onPress={()=>setCouponDiscount(0)}><View style={{height:30,justifyContent:"center",alignItems:"center"}}><Text style={{color:"blue",fontSize:14,fontFamily:FONT.RobotoMedium,padding:5}}>( Remove Coupon )</Text></View></TouchableOpacity>
+                
+            </View>}
+            {couponDiscount==0 && <View style={{backgroundColor:Colors.commonbg,height:50,width:"100%",marginTop:10,justifyContent:"flex-start",alignItems:"center",flexDirection:"row"}}>
+                <TextInput style={{padding:1,marginStart:10,height:30,width:150,borderWidth:1,borderTopStartRadius:5,borderBottomStartRadius:5,borderColor:"gray",backgroundColor:"white"}} value={couponInput} onChangeText={setCouponInput} placeholder={t('cart_couponcode_lbl')} />
+                {!isCouponFetchLoading && <TouchableOpacity onPress={()=>checkAndApplyCoupon()}><View style={{height:30,backgroundColor:Colors.greenBtnColor,width:130,justifyContent:"center",alignItems:"center"}}><Text style={{color:"white",fontSize:14,fontFamily:FONT.RobotoMedium,padding:5}}>{t('cart_applycoupon_lbl')}</Text></View></TouchableOpacity>}
+                {isCouponFetchLoading && <View style={{height:30,backgroundColor:Colors.greenBtnColor,width:130,justifyContent:"center",alignItems:"center"}}><ActivityIndicator color="white" size={"small"} /></View>}
+            </View> }
             <View style={{backgroundColor:Colors.commonbg,height:50,width:"100%",marginTop:10,justifyContent:"flex-start",alignItems:"center",flexDirection:"row"}}>
                 <TextInput style={{padding:1,marginStart:10,height:30,width:150,borderWidth:1,borderTopStartRadius:5,borderBottomStartRadius:5,borderColor:"gray",backgroundColor:"white"}}  placeholder={t('cart_giftcode_lbl')} />
                 <View style={{height:30,backgroundColor:Colors.greenBtnColor,width:130,justifyContent:"center",alignItems:"center"}}><Text style={{color:"white",fontSize:14,fontFamily:FONT.RobotoMedium}}>{t('cart_usegiftcode_lbl')}</Text></View>
@@ -217,6 +291,10 @@ const Cart = (props) => {
                 <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{padding:10,color:Colors.greenBtnColor,fontFamily:FONT.RobotoBold}}></Text></View>
             </View> 
             <View style={{backgroundColor:"#ecf3da",height:360,width:"100%"}}>
+                    {couponDiscount > 0 && <View style={{height:40,width:"100%",marginTop:15,justifyContent:"center",alignItems:"center",flexDirection:"row",borderBottomColor:Colors.commonbg,borderBottomWidth:1}}>
+                        <View style={{flex:1,justifyContent:"center",alignItems:"flex-start"}}><Text style={{padding:10,color:"red",fontSize:18,fontFamily:FONT.RobotoMedium}}>Coupon Discount</Text></View>
+                        <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{padding:10,color:"red",fontSize:18,fontFamily:FONT.RobotoMedium}}>- {couponDiscount} DH</Text></View>
+                    </View>} 
                     <View style={{height:40,width:"100%",marginTop:15,justifyContent:"center",alignItems:"center",flexDirection:"row",borderBottomColor:Colors.commonbg,borderBottomWidth:1}}>
                         <View style={{flex:1,justifyContent:"center",alignItems:"flex-start"}}><Text style={{padding:10,color:"black",fontSize:18,fontFamily:FONT.RobotoMedium}}>{t('cart_subtotal_lbl')}</Text></View>
                         <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{padding:10,color:"black",fontSize:18,fontFamily:FONT.RobotoMedium}}>{SubTotal} DH</Text></View>
@@ -245,7 +323,7 @@ const Cart = (props) => {
 
                     <View style={{height:40,marginHorizontal:5,marginVertical:10,height:40,justifyContent:"center",alignItems:"center",flexDirection:"row",backgroundColor:Colors.greenBtnColor}}>
                         <View style={{flex:1,justifyContent:"center",alignItems:"flex-start"}}><Text style={{paddingStart:10,color:"white",fontSize:18,fontFamily:FONT.RobotoMedium}}>{t('cart_total_lbl')}</Text></View>
-                        <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{paddingEnd:10,color:"white",fontSize:18,fontFamily:FONT.RobotoMedium}}>{Total} DH</Text></View>
+                        <View style={{flex:1,justifyContent:"center",alignItems:"flex-end"}}><Text style={{paddingEnd:10,color:"white",fontSize:18,fontFamily:FONT.RobotoMedium}}>{parseFloat(Total-couponDiscount).toFixed(2)} DH</Text></View>
                     </View>
                     <TouchableOpacity onPress={()=>{processCheckout()}} style={{flex:1,height:40}}><View style={{height:40,marginHorizontal:5,marginVertical:10,height:40,justifyContent:"center",alignItems:"center",flexDirection:"row",borderRadius:10,backgroundColor:Colors.drawerHeaderBackground}}>
                        <Text style={{color:"white",fontSize:18,fontFamily:FONT.RobotoMedium}}>{t('cart_checkout_lbl')}</Text></View>
